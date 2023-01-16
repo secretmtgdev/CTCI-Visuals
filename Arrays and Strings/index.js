@@ -10,16 +10,25 @@ const highlightCharacter = id => {
     });
 }
 
+const clearContainer = container => {
+    while (container.firstChild) {
+        container.firstChild.remove();
+    }
+}
+
 // Pure function as we are not modifying the contents and the return is the same
 const isUnique = async word => {
     characters = new Set();
-    const output = document.querySelector('#is-unique-output');
+    const outputContainer = document.querySelector('#is-unique-output');
+    clearContainer(outputContainer);
+
     for(let i = 0; i < word.length; i++) {
         const c = word[i];
         const id = `${c}-${i}`;
         await highlightCharacter(id);
         if(characters.has(c)) {
-            output.innerHTML = 'Is unique: False';
+            outputContainer.innerHTML = 'Is unique: False';
+            return;
         }
 
         characters.add(c);
@@ -33,9 +42,7 @@ async function checkIsUnique() {
     
     // display the words 
     let visualContainer = document.querySelector('#is-unique-visual');
-    while (visualContainer.firstChild) {
-        visualContainer.firstChild.remove();
-    }
+    clearContainer(visualContainer);
 
     for (let i = 0; i < word.length; i++) {
         const span = document.createElement('span');
